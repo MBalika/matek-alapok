@@ -96,7 +96,7 @@ export function Tengelyek({
         className="tengely"
         markerEnd="url(#hegy-tengely)"
       />
-      <text x={ox + jobbra + 4} y={oy + 5} className="cimke-kicsi" fontStyle="italic">
+      <text x={ox + jobbra - 6} y={oy + 16} className="cimke-kicsi" fontStyle="italic" textAnchor="end">
         {xCimke}
       </text>
       <text x={ox + 6} y={oy - fel - 3} className="cimke-kicsi" fontStyle="italic">

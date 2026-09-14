@@ -8,6 +8,16 @@ import GyokFelfedezo from "@/components/abrak/GyokFelfedezo";
 import { KomplexMuveletKalk, KomplexGyokKalk } from "@/components/abrak/KomplexKalk";
 import { AbraOsszeadas, AbraNegyedek, AbraEgyseggyokok } from "@/components/abrak/KomplexStatikusAbrak";
 import GyakorloSzekcio from "@/components/komplex/GyakorloSzekcio";
+import GyakorloExtra from "@/components/komplex/GyakorloExtra";
+import HatvanySpiral from "@/components/abrak/HatvanySpiral";
+import ForgoMutato from "@/components/abrak/ForgoMutato";
+import Mandelbrot from "@/components/abrak/Mandelbrot";
+import CelbaLoves from "@/components/abrak/CelbaLoves";
+import FilmGyok from "@/components/komplex/FilmGyok";
+import FilmSpiral from "@/components/komplex/FilmSpiral";
+import Kviz from "@/components/Kviz";
+import Hibakereso from "@/components/Hibakereso";
+import { KVIZ, HIBAK } from "@/components/komplex/KvizAdatok";
 import { modulSlugAlapjan } from "@/lib/oldalterkep";
 
 export const metadata = {
@@ -316,6 +326,11 @@ export default function KomplexOldal() {
           <SzorzasFelfedezo />
         </div>
 
+        <div className="mt-6">
+          <p className="mb-2 text-[11px] font-bold tracking-[0.16em] text-naracs-600 uppercase">Próbáld ki — hatványspirál</p>
+          <HatvanySpiral />
+        </div>
+
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <Kartya cimke="Osztás" cim="Az abszolút értékek osztódnak, a szögek kivonódnak">
             <MB>{"\\frac{z_1}{z_2} = \\frac{r_1}{r_2}\\left(\\cos(\\varphi_1 - \\varphi_2) + i\\sin(\\varphi_1 - \\varphi_2)\\right)"}</MB>
@@ -339,6 +354,11 @@ export default function KomplexOldal() {
             Speciálisan <M>{"e^{i\\pi} + 1 = 0"}</M>.
           </p>
         </Kiemelo>
+
+        <div className="mt-6">
+          <p className="mb-2 text-[11px] font-bold tracking-[0.16em] text-naracs-600 uppercase">Próbáld ki — a forgó mutató: mire jó ez a mérnöknek</p>
+          <ForgoMutato />
+        </div>
 
         {/* --- 1.8 --- */}
         <Alcim>1.8 Gyökvonás</Alcim>
@@ -429,6 +449,21 @@ export default function KomplexOldal() {
             <M>{"\\mathbb{C}"}</M> ebben az értelemben teljes — nincs mit tovább bővíteni.
           </p>
         </Proza>
+
+        {/* --- 1.10 --- */}
+        <Alcim>1.10 Miért szép? — a Mandelbrot-halmaz</Alcim>
+        <Proza>
+          <p>
+            Ez a rész nem tananyag, csak látvány. A komplex számok leghíresebb képe egyetlen
+            műveletből születik: <M>{"z \\to z^2 + c"}</M>, vagyis négyzetre emelés (a szög
+            duplázódik, a hossz négyzetre emelődik) és egy eltolás. Ezt ismételjük a végtelenségig,
+            és megnézzük, melyik <M>{"c"}</M> pontból indulva marad korlátos a sorozat. Kattints
+            bele, és nézd meg egy pont pályáját; Shift + kattintással nagyíts — bármeddig.
+          </p>
+        </Proza>
+        <div className="mt-4">
+          <Mandelbrot />
+        </div>
       </Szakasz>
 
       {/* ==================== KIDOLGOZOTT FELADATOK ==================== */}
@@ -563,6 +598,11 @@ export default function KomplexOldal() {
           </Lepes>
         </KidolgozottFeladat>
 
+        <div className="my-6">
+          <p className="mb-2 text-[11px] font-bold tracking-[0.16em] text-naracs-600 uppercase">Film — ugyanez lépésről lépésre, a síkon</p>
+          <FilmSpiral />
+        </div>
+
         {/* ---- KF-4 ---- */}
         <KidolgozottFeladat
           jel="KF‑4"
@@ -616,6 +656,11 @@ export default function KomplexOldal() {
             <MB>{"256(\\cos 240^\\circ + i\\sin 240^\\circ) = 256\\left(-\\tfrac12 - i\\tfrac{\\sqrt3}{2}\\right) = -128 - 128\\sqrt3\\,i \\ ✓"}</MB>
           </Lepes>
         </KidolgozottFeladat>
+
+        <div className="my-6">
+          <p className="mb-2 text-[11px] font-bold tracking-[0.16em] text-naracs-600 uppercase">Film — a négy gyök a síkon, nagyítással</p>
+          <FilmGyok />
+        </div>
 
         {/* ---- KF-5 ---- */}
         <KidolgozottFeladat
@@ -698,7 +743,26 @@ export default function KomplexOldal() {
         bevezeto="Minden feladat új számokkal generálódik, az „új feladat” gombbal pedig végtelen sokat kaphatsz. A megoldást csak akkor nézd meg, ha már próbálkoztál. A tizedesvesszőt és a pontot is elfogadja."
         className="bg-white"
       >
+        <Kviz
+          cim="Érted, vagy csak számolod?"
+          leiras="Tíz kérdés a modul tipikus félreértéseiről. Minden válasz után rövid magyarázat."
+          kerdesek={KVIZ}
+        />
+
+        <Hibakereso feladatok={HIBAK} />
+
+        <div className="my-6">
+          <p className="mb-2 text-[11px] font-bold tracking-[0.16em] text-violet-700 uppercase">Játék — a negyedek gyakorlása</p>
+          <CelbaLoves />
+        </div>
+
+        <h3 className="mt-10 text-xl font-semibold text-petrol-900">Számolós gyakorlás</h3>
+        <p className="mt-2 text-[14px] text-petrol-600">Az öt alaptípus, ami a zárthelyin biztosan előkerül. Öt egymás utáni hibátlan megoldás után konfetti jár.</p>
         <GyakorloSzekcio />
+
+        <h3 className="mt-10 text-xl font-semibold text-petrol-900">További feladattípusok</h3>
+        <p className="mt-2 text-[14px] text-petrol-600">Ezek is bekerülnek a Zh-szimulátorba.</p>
+        <GyakorloExtra />
 
         <Kiemelo tipus="kulcs" cim="Mikor mehetsz tovább">
           <p>

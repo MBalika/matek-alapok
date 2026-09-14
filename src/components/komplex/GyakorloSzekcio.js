@@ -292,6 +292,14 @@ function masodfokuFeladat() {
 
 /* ---------- a szekció ---------- */
 
+export const GENERATOROK = [
+  { cim: "Szorzás és osztás algebrai alakban", fn: muveletFeladat },
+  { cim: "Trigonometrikus alak", fn: trigAlakFeladat },
+  { cim: "Hatványozás Moivre-képlettel", fn: moivreFeladat },
+  { cim: "Gyökvonás", fn: gyokFeladat },
+  { cim: "Másodfokú egyenlet", fn: masodfokuFeladat },
+];
+
 export default function GyakorloSzekcio() {
   return (
     <div>

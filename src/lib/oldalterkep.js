@@ -116,6 +116,19 @@ export const modulok = [
   },
 ];
 
+export const extraOldalak = [
+  {
+    slug: "/zh",
+    rovid: "Zh-szimulátor",
+    leiras: "Négy véletlen feladat órával, segítség nélkül – mint a zárthelyin.",
+  },
+  {
+    slug: "/puska",
+    rovid: "Puska",
+    leiras: "Nyomtatható egyoldalas összefoglaló modulonként.",
+  },
+];
+
 export function modulSlugAlapjan(slug) {
   return modulok.find((m) => m.slug === slug);
 }

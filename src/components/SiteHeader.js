@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { kurzus, modulok } from "@/lib/oldalterkep";
+import { kurzus, modulok, extraOldalak } from "@/lib/oldalterkep";
+import SotetKapcsolo from "@/components/SotetKapcsolo";
 
 function Logo({ className = "" }) {
   // Görbe és tengelyek: a függvény, az analízis alapgondolata
@@ -82,6 +83,25 @@ export default function SiteHeader() {
             <span className="block">{kurzus.tanszek}</span>
             <span className="block text-petrol-300/80">{kurzus.targy}</span>
           </span>
+
+          <div className="hidden items-center gap-1.5 md:flex lg:ml-3">
+            {extraOldalak.map((o) => {
+              const aktiv = utvonal.startsWith(o.slug);
+              return (
+                <Link
+                  key={o.slug}
+                  href={o.slug}
+                  title={o.leiras}
+                  className={`rounded-lg px-2.5 py-1.5 text-[12px] font-semibold transition ${
+                    aktiv ? "bg-naracs-500 text-white" : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  {o.rovid}
+                </Link>
+              );
+            })}
+            <SotetKapcsolo vilagos />
+          </div>
 
           <button
             type="button"
@@ -185,6 +205,19 @@ export default function SiteHeader() {
       {mobilNyitva && (
         <nav className="border-b border-[color:var(--keret)] bg-white shadow-lg md:hidden">
           <div className="max-h-[70vh] overflow-y-auto px-4 py-3">
+            <div className="flex flex-wrap items-center gap-2 border-b border-petrol-50 pb-3">
+              {extraOldalak.map((o) => (
+                <Link
+                  key={o.slug}
+                  href={o.slug}
+                  onClick={() => setMobilNyitva(false)}
+                  className="rounded-lg bg-naracs-500 px-3 py-1.5 text-[12.5px] font-semibold text-white"
+                >
+                  {o.rovid}
+                </Link>
+              ))}
+              <SotetKapcsolo />
+            </div>
             {modulok.map((m) => {
               const aktiv =
                 m.slug === "/" ? utvonal === "/" : utvonal.startsWith(m.slug);
