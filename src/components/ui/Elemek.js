@@ -1,6 +1,13 @@
 /** Újrahasznosítható tartalmi elemek: szakasz, kártya, kiemelő doboz, ábra-keret. */
 
-export function Szakasz({ id, cimke, cim, bevezeto, children, className = "" }) {
+export function Szakasz({
+  id,
+  cimke,
+  cim,
+  bevezeto,
+  children,
+  className = "",
+}) {
   return (
     <section id={id} className={`scroll-mt-32 py-10 ${className}`}>
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -28,7 +35,7 @@ export function Szakasz({ id, cimke, cim, bevezeto, children, className = "" }) 
 export function Kartya({ cim, cimke, children, className = "" }) {
   return (
     <div
-      className={`rounded-2xl border border-[color:var(--keret)] bg-white p-5 shadow-sm shadow-petrol-900/[0.03] sm:p-6 ${className}`}
+      className={`min-w-0 rounded-2xl border border-[color:var(--keret)] bg-white p-5 shadow-sm shadow-petrol-900/[0.03] sm:p-6 ${className}`}
     >
       {cimke && (
         <p className="text-[10.5px] font-semibold tracking-[0.16em] text-petrol-400 uppercase">

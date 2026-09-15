@@ -16,7 +16,7 @@ export default function ZhOldal() {
           </div>
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">Zh-szimulátor</h1>
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-petrol-200">
-            Négy feladat az elkészült modulokból, órával és visszajelzés nélkül — ahogy a zárthelyin. A végén
+            Négy–nyolc feladat a kiválasztott modulokból, órával és visszajelzés nélkül — ahogy a zárthelyin. A végén
             mezőnként látod az eredményt, és megnézheted a levezetést. Az eredmények a böngésződben megmaradnak.
           </p>
         </div>

@@ -60,7 +60,7 @@ const FEJEZETEK = [
     t0: 17.5,
     cim: "Ellenőrzés: w₀ négyszer önmagával",
     szoveg: "Minden szorzás 60°-kal forgat és 4-szeresére nyújt: 4 → 16 → 64 → 256, és 60° → 120° → 180° → 240°. A negyedik lépés visszaér z-be — kicsinyítünk, hogy lássuk.",
-    kepletek: ["w_0^4 = 4^4\\left(\\cos 240^\\circ + i\\sin 240^\\circ\\right) = -128 - 128\\sqrt3\\,i\\ ✓"],
+    kepletek: ["w_0^4 = 4^4\\left(\\cos 240^\\circ + i\\sin 240^\\circ\\right) = -128 - 128\\sqrt3\\,i\\ \\checkmark"],
   },
 ];
 

@@ -51,7 +51,7 @@ export const modulok = [
     rovid: "Térgeometria",
     leiras:
       "Vektorok a térben, skaláris, vektoriális és vegyes szorzat, egyenes és sík egyenletei, távolságok, szögek.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
   {
@@ -61,7 +61,7 @@ export const modulok = [
     rovid: "Sorozatok",
     leiras:
       "Konvergencia és határérték, monoton korlátos sorozatok, rendőrelv, nevezetes határértékek, az e szám.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
   {
@@ -71,7 +71,7 @@ export const modulok = [
     rovid: "Függvények",
     leiras:
       "Függvénytulajdonságok, inverz, elemi függvények, görbék, függvényhatárérték, folytonosság, Bolzano és Weierstrass tétele.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
   {
@@ -81,7 +81,7 @@ export const modulok = [
     rovid: "Deriválás",
     leiras:
       "A derivált fogalma, deriválási szabályok, középértéktételek, L'Hospital, függvényvizsgálat, Taylor-polinom.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
   {
@@ -91,7 +91,7 @@ export const modulok = [
     rovid: "Határozatlan ∫",
     leiras:
       "Primitív függvény, alapintegrálok, helyettesítés, parciális integrálás, racionális törtfüggvények.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
   {
@@ -101,7 +101,7 @@ export const modulok = [
     rovid: "Határozott ∫",
     leiras:
       "Riemann-integrál, Newton–Leibniz-tétel, terület, ívhossz, forgástest térfogata és felszíne, súlypont.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
   {
@@ -111,7 +111,7 @@ export const modulok = [
     rovid: "Improprius ∫",
     leiras:
       "Nem korlátos tartomány és integrandus, konvergenciakritériumok, trapéz- és Simpson-szabály.",
-    kesz: false,
+    kesz: true,
     szakaszok: negyLepes,
   },
 ];
@@ -120,7 +120,7 @@ export const extraOldalak = [
   {
     slug: "/zh",
     rovid: "Zh-szimulátor",
-    leiras: "Négy véletlen feladat órával, segítség nélkül – mint a zárthelyin.",
+    leiras: "Véletlen feladatsor órával, segítség nélkül – mint a zárthelyin.",
   },
   {
     slug: "/puska",

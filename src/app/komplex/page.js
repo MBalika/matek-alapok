@@ -653,7 +653,7 @@ export default function KomplexOldal() {
               <M>{"w_0^4"}</M> abszolút értéke <M>{"4^4 = 256"}</M>, szöge{" "}
               <M>{"4\\cdot 60^\\circ = 240^\\circ"}</M>:
             </p>
-            <MB>{"256(\\cos 240^\\circ + i\\sin 240^\\circ) = 256\\left(-\\tfrac12 - i\\tfrac{\\sqrt3}{2}\\right) = -128 - 128\\sqrt3\\,i \\ ✓"}</MB>
+            <MB>{"256(\\cos 240^\\circ + i\\sin 240^\\circ) = 256\\left(-\\tfrac12 - i\\tfrac{\\sqrt3}{2}\\right) = -128 - 128\\sqrt3\\,i \\ \\checkmark"}</MB>
           </Lepes>
         </KidolgozottFeladat>
 
@@ -695,7 +695,7 @@ export default function KomplexOldal() {
             <MB>{"z_{1,2} = \\frac{-4 \\pm 6i}{2} = -2 \\pm 3i"}</MB>
           </Lepes>
           <Lepes cim="Ellenőrzés behelyettesítéssel">
-            <MB>{"(-2+3i)^2 + 4(-2+3i) + 13 = (4 - 12i - 9) + (-8 + 12i) + 13 = 0 \\ ✓"}</MB>
+            <MB>{"(-2+3i)^2 + 4(-2+3i) + 13 = (4 - 12i - 9) + (-8 + 12i) + 13 = 0 \\ \\checkmark"}</MB>
           </Lepes>
         </KidolgozottFeladat>
       </Szakasz>

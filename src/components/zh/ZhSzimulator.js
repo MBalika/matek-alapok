@@ -17,7 +17,11 @@ function helyesE(mezo, ertek) {
   return Math.abs(v - mezo.helyes) <= tures;
 }
 function kerekit(szam, tizedes) {
-  return szam.toFixed(tizedes).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "").replace(".", ",");
+  return szam
+    .toFixed(tizedes)
+    .replace(/(\.\d*?)0+$/, "$1")
+    .replace(/\.$/, "")
+    .replace(".", ",");
 }
 function ido(mp) {
   const m = Math.floor(mp / 60);
@@ -34,12 +38,14 @@ function jegy(arany) {
 
 /** Négy feladat: modulonként egy; ha kevesebb kész modul van, ugyanabból a modulból
  *  több, de mindig különböző típusú feladat kerül a sorba. */
-function ujFeladatsor() {
-  const DB = 4;
-  const hasznalt = MODULOK.map(() => new Set());
+function ujFeladatsor(valasztott, DB = 4) {
+  const lista = MODULOK.filter((m) => valasztott.includes(m.nev));
+  const modulok = lista.length ? lista : MODULOK;
+  const eltolas = Math.floor(Math.random() * modulok.length);
+  const hasznalt = modulok.map(() => new Set());
   return Array.from({ length: DB }, (_, i) => {
-    const m = MODULOK[i % MODULOK.length];
-    const mi = i % MODULOK.length;
+    const mi = (i + eltolas) % modulok.length;
+    const m = modulok[mi];
     const szabad = m.gen.filter((g) => !hasznalt[mi].has(g.cim));
     const g = valaszt(szabad.length ? szabad : m.gen);
     hasznalt[mi].add(g.cim);
@@ -50,6 +56,8 @@ function ujFeladatsor() {
 export default function ZhSzimulator() {
   const [fazis, setFazis] = useState("kezdo");
   const [perc, setPerc] = useState(20);
+  const [valasztott, setValasztott] = useState(MODULOK.map((m) => m.nev));
+  const [db, setDb] = useState(4);
   const [feladatok, setFeladatok] = useState(null);
   const [valaszok, setValaszok] = useState({});
   const [hatra, setHatra] = useState(0);
@@ -68,7 +76,7 @@ export default function ZhSzimulator() {
   }, []);
 
   const indit = () => {
-    setFeladatok(ujFeladatsor());
+    setFeladatok(ujFeladatsor(valasztott, db));
     setValaszok({});
     setNyitott({});
     setHatra(perc * 60);
@@ -142,17 +150,81 @@ export default function ZhSzimulator() {
     return (
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
         <div className="rounded-2xl border border-[color:var(--keret)] bg-white p-5 sm:p-6">
-          <p className="text-[11px] font-bold tracking-[0.16em] text-naracs-600 uppercase">Hogyan működik</p>
+          <p className="text-[11px] font-bold tracking-[0.16em] text-naracs-600 uppercase">
+            Hogyan működik
+          </p>
           <ul className="mt-3 space-y-2 text-[14.5px] leading-relaxed text-petrol-700">
-            <li>Négy véletlen feladat az elkészült modulokból — ugyanazokból a típusokból, mint a gyakorló dobozok, de <strong>segítség és ellenőrzés nélkül</strong>. Ahogy újabb modulok készülnek el, azok feladatai is bekerülnek.</li>
-            <li>Az óra indul, és a beadásig (vagy az idő lejártáig) nincs visszajelzés. Papírral, számológéppel dolgozz, ahogy a zh-n.</li>
-            <li>A végén mezőnként látod, mi volt jó, mi nem, és minden feladathoz megnyithatod a teljes levezetést.</li>
-            <li>Az eredményeid ebben a böngészőben elmentődnek, hogy lásd a fejlődést.</li>
+            <li>
+              Négy, hat vagy nyolc véletlen feladat a kiválasztott modulokból —
+              ugyanazokból a típusokból, mint a gyakorló dobozok, de{" "}
+              <strong>segítség és ellenőrzés nélkül</strong>. Ahogy újabb
+              modulok készülnek el, azok feladatai is bekerülnek.
+            </li>
+            <li>
+              Az óra indul, és a beadásig (vagy az idő lejártáig) nincs
+              visszajelzés. Papírral, számológéppel dolgozz, ahogy a zh-n.
+            </li>
+            <li>
+              A végén mezőnként látod, mi volt jó, mi nem, és minden feladathoz
+              megnyithatod a teljes levezetést.
+            </li>
+            <li>
+              Az eredményeid ebben a böngészőben elmentődnek, hogy lásd a
+              fejlődést.
+            </li>
           </ul>
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <span className="text-[13px] font-medium text-petrol-600">Időkeret:</span>
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <span className="mr-1 text-[13px] font-medium text-petrol-600">
+              Modulok:
+            </span>
+            {MODULOK.map((m) => {
+              const be = valasztott.includes(m.nev);
+              return (
+                <button
+                  key={m.nev}
+                  type="button"
+                  onClick={() =>
+                    setValasztott((v) =>
+                      be
+                        ? v.length > 1
+                          ? v.filter((x) => x !== m.nev)
+                          : v
+                        : [...v, m.nev],
+                    )
+                  }
+                  className={`rounded-full px-3 py-1 text-[12.5px] font-semibold transition ${
+                    be
+                      ? `${m.szin} text-white`
+                      : "bg-petrol-50 text-petrol-500 ring-1 ring-petrol-200 hover:bg-petrol-100"
+                  }`}
+                >
+                  {be ? "✓ " : ""}
+                  {m.nev}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <span className="text-[13px] font-medium text-petrol-600">
+              Feladatok:
+            </span>
             <div className="flex gap-1 rounded-lg bg-petrol-50 p-0.5 ring-1 ring-petrol-200">
-              {[15, 20, 30].map((p) => (
+              {[4, 6, 8].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setDb(n)}
+                  className={`rounded-md px-3 py-1 text-[13px] font-semibold ${db === n ? "bg-petrol-700 text-white" : "text-petrol-600 hover:bg-white"}`}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+            <span className="text-[13px] font-medium text-petrol-600">
+              Időkeret:
+            </span>
+            <div className="flex gap-1 rounded-lg bg-petrol-50 p-0.5 ring-1 ring-petrol-200">
+              {[15, 20, 30, 45].map((p) => (
                 <button
                   key={p}
                   type="button"
@@ -173,9 +245,13 @@ export default function ZhSzimulator() {
           </div>
         </div>
         <div className="rounded-2xl border border-[color:var(--keret)] bg-white p-5 sm:p-6">
-          <p className="text-[11px] font-bold tracking-[0.16em] text-petrol-500 uppercase">Korábbi próbálkozásaid</p>
+          <p className="text-[11px] font-bold tracking-[0.16em] text-petrol-500 uppercase">
+            Korábbi próbálkozásaid
+          </p>
           {elozmenyek.length === 0 ? (
-            <p className="mt-3 text-[13.5px] text-petrol-500">Még nincs. Az első zh után itt jelenik meg az eredmény.</p>
+            <p className="mt-3 text-[13.5px] text-petrol-500">
+              Még nincs. Az első zh után itt jelenik meg az eredmény.
+            </p>
           ) : (
             <ul className="mt-3 space-y-1.5">
               {elozmenyek.map((e, i) => {
@@ -183,8 +259,15 @@ export default function ZhSzimulator() {
                 const j = jegy(ar);
                 const d = new Date(e.mikor);
                 return (
-                  <li key={i} className="flex items-center gap-3 rounded-lg bg-petrol-50 px-3 py-2 text-[13px]">
-                    <span className={`grid h-7 w-7 place-items-center rounded-md text-[13px] font-bold text-white ${j.jegy >= 4 ? "bg-emerald-600" : j.jegy >= 2 ? "bg-naracs-500" : "bg-rose-500"}`}>{j.jegy}</span>
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 rounded-lg bg-petrol-50 px-3 py-2 text-[13px]"
+                  >
+                    <span
+                      className={`grid h-7 w-7 place-items-center rounded-md text-[13px] font-bold text-white ${j.jegy >= 4 ? "bg-emerald-600" : j.jegy >= 2 ? "bg-naracs-500" : "bg-rose-500"}`}
+                    >
+                      {j.jegy}
+                    </span>
                     <span className="szamok text-petrol-800">
                       {e.jo} / {e.ossz} mező · {Math.round(ar * 100)} %
                     </span>
@@ -205,9 +288,19 @@ export default function ZhSzimulator() {
   if (fazis === "fut" && feladatok) {
     return (
       <div>
-        <div className={`sticky top-[110px] z-30 mb-4 flex items-center gap-3 rounded-xl border px-4 py-2.5 shadow-sm md:top-[150px] ${surgos ? "border-rose-300 bg-rose-50" : "border-[color:var(--keret)] bg-white"}`}>
-          <span className={`text-[11px] font-bold tracking-[0.16em] uppercase ${surgos ? "text-rose-700" : "text-petrol-500"}`}>Hátralévő idő</span>
-          <span className={`szamok text-2xl font-bold ${surgos ? "text-rose-700" : "text-petrol-900"}`}>{ido(hatra)}</span>
+        <div
+          className={`sticky top-[110px] z-30 mb-4 flex items-center gap-3 rounded-xl border px-4 py-2.5 shadow-sm md:top-[150px] ${surgos ? "border-rose-300 bg-rose-50" : "border-[color:var(--keret)] bg-white"}`}
+        >
+          <span
+            className={`text-[11px] font-bold tracking-[0.16em] uppercase ${surgos ? "text-rose-700" : "text-petrol-500"}`}
+          >
+            Hátralévő idő
+          </span>
+          <span
+            className={`szamok text-2xl font-bold ${surgos ? "text-rose-700" : "text-petrol-900"}`}
+          >
+            {ido(hatra)}
+          </span>
           <button
             type="button"
             onClick={bead}
@@ -218,27 +311,49 @@ export default function ZhSzimulator() {
         </div>
         <div className="space-y-4">
           {feladatok.map((f) => (
-            <div key={f.i} className="rounded-2xl border border-[color:var(--keret)] bg-white p-4 sm:p-5">
+            <div
+              key={f.i}
+              className="rounded-2xl border border-[color:var(--keret)] bg-white p-4 sm:p-5"
+            >
               <div className="flex flex-wrap items-center gap-2">
-                <span className={`rounded-md px-2 py-0.5 text-[10.5px] font-bold tracking-[0.12em] text-white uppercase ${f.szin}`}>{f.i + 1}. feladat</span>
-                <span className="text-[12px] font-semibold text-petrol-500">{f.modul}</span>
+                <span
+                  className={`rounded-md px-2 py-0.5 text-[10.5px] font-bold tracking-[0.12em] text-white uppercase ${f.szin}`}
+                >
+                  {f.i + 1}. feladat
+                </span>
+                <span className="text-[12px] font-semibold text-petrol-500">
+                  {f.modul}
+                </span>
                 <span className="text-[12px] text-petrol-400">· {f.cim}</span>
               </div>
-              <div className="proza mt-3 text-[14.5px] leading-relaxed text-petrol-800">{f.adat.szoveg}</div>
-              <div className={`mt-3 grid gap-3 ${f.adat.mezok.length > 1 ? "sm:grid-cols-2" : ""} ${f.adat.mezok.length > 2 ? "lg:grid-cols-3" : ""}`}>
+              <div className="proza mt-3 text-[14.5px] leading-relaxed text-petrol-800">
+                {f.adat.szoveg}
+              </div>
+              <div
+                className={`mt-3 grid gap-3 ${f.adat.mezok.length > 1 ? "sm:grid-cols-2" : ""} ${f.adat.mezok.length > 2 ? "lg:grid-cols-3" : ""}`}
+              >
                 {f.adat.mezok.map((m) => (
                   <label key={m.id} className="block">
-                    <span className="mb-1 block text-[12px] font-medium text-petrol-600">{m.cimke}</span>
+                    <span className="mb-1 block text-[12px] font-medium text-petrol-600">
+                      {m.cimke}
+                    </span>
                     <span className="flex items-stretch overflow-hidden rounded-lg border border-petrol-200 bg-white focus-within:border-petrol-500">
                       <input
                         type="text"
                         inputMode="decimal"
                         value={valaszok[`${f.i}-${m.id}`] ?? ""}
-                        onChange={(e) => setValaszok((v) => ({ ...v, [`${f.i}-${m.id}`]: e.target.value }))}
+                        onChange={(e) =>
+                          setValaszok((v) => ({
+                            ...v,
+                            [`${f.i}-${m.id}`]: e.target.value,
+                          }))
+                        }
                         className="szamok min-w-0 flex-1 px-3 py-2 text-[14px] text-petrol-900 focus:outline-none"
                         placeholder="…"
                       />
-                      <span className="flex items-center border-l border-petrol-100 bg-petrol-50 px-2.5 text-[12px] text-petrol-500">{m.egyseg}</span>
+                      <span className="flex items-center border-l border-petrol-100 bg-petrol-50 px-2.5 text-[12px] text-petrol-500">
+                        {m.egyseg}
+                      </span>
                     </span>
                   </label>
                 ))}
@@ -247,7 +362,11 @@ export default function ZhSzimulator() {
           ))}
         </div>
         <div className="mt-5 flex justify-end">
-          <button type="button" onClick={bead} className="rounded-xl bg-naracs-500 px-5 py-2.5 text-[14px] font-bold text-white shadow-md shadow-naracs-500/25 transition hover:bg-naracs-600">
+          <button
+            type="button"
+            onClick={bead}
+            className="rounded-xl bg-naracs-500 px-5 py-2.5 text-[14px] font-bold text-white shadow-md shadow-naracs-500/25 transition hover:bg-naracs-600"
+          >
             Beadom
           </button>
         </div>
@@ -261,35 +380,69 @@ export default function ZhSzimulator() {
     return (
       <div>
         <div className="rounded-2xl border border-[color:var(--keret)] bg-white p-5 text-center sm:p-6">
-          <p className="text-[11px] font-bold tracking-[0.16em] text-petrol-500 uppercase">Eredmény</p>
+          <p className="text-[11px] font-bold tracking-[0.16em] text-petrol-500 uppercase">
+            Eredmény
+          </p>
           <p className="szamok mt-1 text-5xl font-bold text-petrol-900">
-            {ertekeles.jo} <span className="text-xl font-semibold text-petrol-400">/ {ertekeles.ossz} mező</span>
+            {ertekeles.jo}{" "}
+            <span className="text-xl font-semibold text-petrol-400">
+              / {ertekeles.ossz} mező
+            </span>
           </p>
           <p className="mt-1 text-[15px] text-petrol-700">
-            {Math.round(ertekeles.arany * 100)} % · tájékoztató jegy: <strong>{j.jegy} ({j.nev})</strong> · felhasznált idő: {ido(perc * 60 - hatra)}
+            {Math.round(ertekeles.arany * 100)} % · tájékoztató jegy:{" "}
+            <strong>
+              {j.jegy} ({j.nev})
+            </strong>{" "}
+            · felhasznált idő: {ido(perc * 60 - hatra)}
           </p>
           <p className="mx-auto mt-2 max-w-xl text-[13px] text-petrol-500">
-            A jegyhatárok csak tájékoztatók (85 / 70 / 55 / 40 %). A valódi zh-n a levezetés is pontot ér — itt csak a végeredményt nézzük.
+            A jegyhatárok csak tájékoztatók (85 / 70 / 55 / 40 %). A valódi zh-n
+            a levezetés is pontot ér — itt csak a végeredményt nézzük.
           </p>
-          <button type="button" onClick={() => setFazis("kezdo")} className="mt-4 rounded-xl bg-naracs-500 px-5 py-2.5 text-[14px] font-bold text-white transition hover:bg-naracs-600">
+          <button
+            type="button"
+            onClick={() => setFazis("kezdo")}
+            className="mt-4 rounded-xl bg-naracs-500 px-5 py-2.5 text-[14px] font-bold text-white transition hover:bg-naracs-600"
+          >
             Új zh ↻
           </button>
         </div>
         <div className="mt-5 space-y-4">
           {ertekeles.reszlet.map((f) => (
-            <div key={f.i} className={`rounded-2xl border p-4 sm:p-5 ${f.joDb === f.mez.length ? "border-emerald-200 bg-emerald-50/40" : f.joDb === 0 ? "border-rose-200 bg-rose-50/40" : "border-naracs-200 bg-naracs-50/40"}`}>
+            <div
+              key={f.i}
+              className={`rounded-2xl border p-4 sm:p-5 ${f.joDb === f.mez.length ? "border-emerald-200 bg-emerald-50/40" : f.joDb === 0 ? "border-rose-200 bg-rose-50/40" : "border-naracs-200 bg-naracs-50/40"}`}
+            >
               <div className="flex flex-wrap items-center gap-2">
-                <span className={`rounded-md px-2 py-0.5 text-[10.5px] font-bold tracking-[0.12em] text-white uppercase ${f.szin}`}>{f.i + 1}. feladat</span>
-                <span className="text-[12px] font-semibold text-petrol-500">{f.modul} · {f.cim}</span>
-                <span className="ml-auto szamok text-[13px] font-bold text-petrol-800">{f.joDb} / {f.mez.length}</span>
+                <span
+                  className={`rounded-md px-2 py-0.5 text-[10.5px] font-bold tracking-[0.12em] text-white uppercase ${f.szin}`}
+                >
+                  {f.i + 1}. feladat
+                </span>
+                <span className="text-[12px] font-semibold text-petrol-500">
+                  {f.modul} · {f.cim}
+                </span>
+                <span className="ml-auto szamok text-[13px] font-bold text-petrol-800">
+                  {f.joDb} / {f.mez.length}
+                </span>
               </div>
-              <div className="proza mt-2 text-[13.5px] text-petrol-700">{f.adat.szoveg}</div>
+              <div className="proza mt-2 text-[13.5px] text-petrol-700">
+                {f.adat.szoveg}
+              </div>
               <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
                 {f.mez.map((m) => (
-                  <li key={m.id} className={`szamok rounded-lg px-3 py-1.5 text-[13px] ${m.ok ? "bg-emerald-100 text-emerald-900" : "bg-rose-100 text-rose-900"}`}>
-                    <span className="font-semibold">{m.cimke}:</span> {m.adott ? String(m.adott) : "—"} {m.egyseg}
+                  <li
+                    key={m.id}
+                    className={`szamok rounded-lg px-3 py-1.5 text-[13px] ${m.ok ? "bg-emerald-100 text-emerald-900" : "bg-rose-100 text-rose-900"}`}
+                  >
+                    <span className="font-semibold">{m.cimke}:</span>{" "}
+                    {m.adott ? String(m.adott) : "—"} {m.egyseg}
                     {!m.ok && (
-                      <span className="ml-2 text-rose-700">→ helyesen {kerekit(m.helyes, m.tizedes ?? 2)} {m.egyseg}</span>
+                      <span className="ml-2 text-rose-700">
+                        → helyesen {kerekit(m.helyes, m.tizedes ?? 2)}{" "}
+                        {m.egyseg}
+                      </span>
                     )}
                   </li>
                 ))}
@@ -301,7 +454,11 @@ export default function ZhSzimulator() {
               >
                 {nyitott[f.i] ? "Levezetés elrejtése" : "Levezetés megmutatása"}
               </button>
-              {nyitott[f.i] && <div className="proza szamok mt-2 rounded-xl bg-white p-4 text-[14px] text-petrol-800">{f.adat.megoldas}</div>}
+              {nyitott[f.i] && (
+                <div className="proza szamok mt-2 rounded-xl bg-white p-4 text-[14px] text-petrol-800">
+                  {f.adat.megoldas}
+                </div>
+              )}
             </div>
           ))}
         </div>

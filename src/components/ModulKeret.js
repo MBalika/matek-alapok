@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { extraOldalak } from "@/lib/oldalterkep";
 
 /** Nagy modulfejléc a modul-oldalak tetején. */
 export function ModulFejlec({ szam, cim, leiras, tartalom = [] }) {
@@ -78,6 +80,22 @@ export function SzakaszSav({ szakaszok }) {
           >
             {sz.cim}
           </a>
+        ))}
+        <span className="mx-1.5 my-1 w-px shrink-0 self-stretch bg-[color:var(--keret)]" aria-hidden="true" />
+        {extraOldalak.map((o) => (
+          <Link
+            key={o.slug}
+            href={o.slug}
+            title={o.leiras}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[12.5px] font-semibold whitespace-nowrap transition ${
+              o.slug === "/zh"
+                ? "bg-naracs-500 text-white hover:bg-naracs-600"
+                : "bg-white text-naracs-700 ring-1 ring-naracs-300 hover:bg-naracs-50"
+            }`}
+          >
+            {o.slug === "/zh" ? "⏱ " : "✎ "}
+            {o.rovid}
+          </Link>
         ))}
       </div>
     </div>
